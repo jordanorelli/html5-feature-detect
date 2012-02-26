@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>sniff sniff</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="modernizr-2.5.3.js"></script>
+    <script src="mustache.js"></script>
+
+    <script id="features-template" type="text/plain">
+      <dl class="features">
+        {{#features}}
+          <dt>{{name}}</dt>
+          <dd>{{enabled}}</dd>
+        {{/features}}
+      </dl>
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        var featuresTemplate = $("#features-template").html();
+        var supportedFeatures = [];
+
+        var logFeatureSupport = function(featureName, enabled) {
+          supportedFeatures.push({name: featureName, enabled: enabled || "false"});
+        };
+
+        $.each({
+          canvas: Modernizr.canvas,
+          "canvas text": Modernizr.canvastext,
+          video: Modernizr.video,
+          "video/webm": Modernizr.video.webm,
+          "video/ogg": Modernizr.video.ogg,
+          "video/h264": Modernizr.video.h264,
+          "local storage": Modernizr.localstorage,
+          "web workers": Modernizr.webworkers,
+          "offline applications": Modernizr.applicationcache,
+          "geolocation": Modernizr.geolocation,
+          "input/search": Modernizr.inputtypes.search,
+          "input/tel": Modernizr.inputtypes.tel,
+          "input/url": Modernizr.inputtypes.url,
+          "input/email": Modernizr.inputtypes.email,
+          "input/datetime": Modernizr.inputtypes.datetime,
+          "input/date": Modernizr.inputtypes.date,
+          "input/month": Modernizr.inputtypes.month,
+          "input/week": Modernizr.inputtypes.week,
+          "input/time": Modernizr.inputtypes.time,
+          "input/datetime-local": Modernizr.inputtypes["datetime-local"],
+          "input/number": Modernizr.inputtypes.number,
+          "input/range": Modernizr.inputtypes.range,
+          "input/color": Modernizr.inputtypes.color,
+          "input placeholder text": Modernizr.input.placeholder,
+          "input autofocus": Modernizr.input.autofocus,
+          "microdata": !!document.getItems,
+          "history": Modernizr.history
+        }, logFeatureSupport);
+
+        $("#supported-features").append(Mustache.to_html(featuresTemplate, {
+          features: supportedFeatures
+        }));
+      });
+    </script>
+  </head>
+  <body>
+    <div id="supported-features"></div>
+  </body>
+</html>
